@@ -53,9 +53,9 @@
                             <div class="input-group-prepend">
                                 <span class="input-group-text" id="basic-addon1">Rp</span>
                             </div>
-                            <input type="text" class="form-control <?= ($validation->hasError('harga')) ? 'is-invalid' : ''; ?>" id="harga" aria-label="Username" onkeyup="splitInDots(this);" aria-describedby="basic-addon1" name="harga" value="<?= old('harga'); ?>">
+                            <input type="text" class="form-control <?= ($validation->hasError('harga')) ? 'is-invalid' : ''; ?>" id="harga_total" aria-label="Username" onkeyup="splitInDots(this);" aria-describedby="basic-addon1" name="harga"">
                         </div>
-                        <div class="invalid-feedback">
+                        <div class=" invalid-feedback">
                             <?= $validation->getError('harga'); ?>
                         </div>
                         <button type="submit" class="btn btn-default">Oke</button>
@@ -67,6 +67,7 @@
 </div>
 <?= $this->endSection(); ?>
 <?= $this->section('script'); ?>
+<script src="/assets/js/simple.money.format.js"></script>
 <script>
     function reverseNumber(input) {
         return [].map.call(input, function(x) {
@@ -91,18 +92,27 @@
         $('.pengeluaran').click(function() {
             $('#pengeluaran_barang').val(nilai);
             $(this).after(` <div class="row mt-2">
-                            <div class="col-sm-5">
+                            <div class="col-sm-4 barang">
                                 <label for="">Nama Barang</label>
-                                <select class="custom-select" id="barang" name="barang` + nilai + `">
+                                <select class="custom-select" id="barang` + nilai + `" name="barang` + nilai + `">
                                     <option selected value=""></option>
                                     <?php foreach ($barang as $b) : ?>
                                         <option value="<?= $b['id']; ?>"><?= $b['barang']; ?></option>
                                     <?php endforeach; ?>
                                 </select>
                             </div>
-                            <div class="col-sm-5">
+                            <div class="col-sm-4 jumlah">
                                 <label for="">Jumlah Barang</label>
-                                <input type="number" class="form-control" id="jumlah" value="1" name="jumlah_barang` + nilai + `">
+                                <input type="number" class="form-control" id="jumlah_barang` + nilai + `" value="1" name="jumlah_barang` + nilai + `">
+                            </div>
+                            <div class="col-sm-3">
+                            <label for="">Sub total</label>
+                            <div class="input-group">
+                                <div class="input-group-prepend">
+                                <span class="input-group-text" id="basic-addon1">Rp</span>
+                            </div>
+                                <input type="text" class="form-control sub_total" id="sub_total` + nilai + `" value="" name="sub_total" readonly>
+                            </div>
                             </div>
                             <div class="col mt-4 ml--3">
                                 <button type="button" class="btn btn-outline-danger d-inline nilai` + nilai + `">
@@ -113,7 +123,89 @@
             $('.nilai' + nilai).click(function() {
                 let barang = $('#pengeluaran_barang').val();
                 $('#pengeluaran_barang').val(barang - 1);
+                const sub_harga = $(this).parent().parent().children('.col-sm-3').children('.input-group').children('input').val();
+                $('#harga_total').val(parseInt($('#harga_total').val().replace(/\./g, '')) - parseInt(sub_harga.replace(/\./g, '')));
+                if ($('#harga_total').val() == 0) {
+                    $('#harga_total').val('');
+                    $('#harga_total').attr('readonly', false);
+                } else {
+                    $('#harga_total').simpleMoneyFormat();
+                }
                 $(this).parent().parent().remove();
+            });
+            $('#barang' + nilai).change(function() {
+                if ($(this).children("option:selected").val() == '') {
+                    return false;
+                }
+                let jumlah = $(this).parents('div.row').children('div.jumlah').children('input').val();
+                let sub_total = $(this).parents('div.row').children('div.col-sm-3').children('div.input-group').children('input');
+                $.ajax({
+                    url: '/pembayaran/tampilTotal',
+                    method: 'post',
+                    data: {
+                        barang: $(this).children("option:selected").val(),
+                        jumlah: jumlah
+                    },
+                    dataType: 'json',
+                    success: function(data) {
+                        const subTotalLama = sub_total.val();
+                        sub_total.val(data);
+                        if (sub_total.val() !== 0) {
+                            if ($('#harga_total').is('[readonly')) {
+                                if (subTotalLama != '') {
+                                    $('#harga_total').val(parseInt($('#harga_total').val().replace(/\./g, '')) - parseInt(subTotalLama.replace(/\./g, '')));
+                                    $('#harga_total').val(parseInt($('#harga_total').val()) + parseInt(sub_total.val().replace(/\./g, '')));
+                                    $('#harga_total').simpleMoneyFormat();
+                                } else {
+                                    $('#harga_total').val(parseInt($('#harga_total').val().replace(/\./g, '')) + parseInt(sub_total.val().replace(/\./g, '')));
+                                    $('#harga_total').simpleMoneyFormat();
+                                }
+                            } else {
+                                $('#harga_total').attr('readonly', 'readonly');
+                                $('#harga_total').val(sub_total.val());
+                                $('#harga_total').simpleMoneyFormat();
+                            }
+                        }
+                        sub_total.simpleMoneyFormat();
+                    }
+                });
+            });
+            $('#jumlah_barang' + nilai).change(function() {
+                if ($(this).parents('div.row').children('div.barang').children('select').children("option:selected").val() == '') {
+                    return false;
+                }
+                let barang = $(this).parents('div.row').children('div.barang').children('select').children("option:selected").val();
+                let sub_total = $(this).parents('div.row').children('div.col-sm-3').children('div.input-group').children('input');
+                $.ajax({
+                    url: '/pembayaran/tampilTotal',
+                    method: 'post',
+                    data: {
+                        barang: barang,
+                        jumlah: $(this).val()
+                    },
+                    dataType: 'json',
+                    success: function(data) {
+                        const subTotalLama = sub_total.val();
+                        sub_total.val(data);
+                        if (sub_total.val() !== 0) {
+                            if ($('#harga_total').is('[readonly')) {
+                                if (subTotalLama != '') {
+                                    $('#harga_total').val(parseInt($('#harga_total').val().replace(/\./g, '')) - parseInt(subTotalLama.replace(/\./g, '')));
+                                    $('#harga_total').val(parseInt($('#harga_total').val()) + parseInt(sub_total.val().replace(/\./g, '')));
+                                    $('#harga_total').simpleMoneyFormat();
+                                } else {
+                                    $('#harga_total').val(parseInt($('#harga_total').val().replace(/\./g, '')) + parseInt(sub_total.val().replace(/\./g, '')));
+                                    $('#harga_total').simpleMoneyFormat();
+                                }
+                            } else {
+                                $('#harga_total').attr('readonly', 'readonly');
+                                $('#harga_total').val(sub_total.val());
+                                $('#harga_total').simpleMoneyFormat();
+                            }
+                        }
+                        sub_total.simpleMoneyFormat();
+                    }
+                });
             });
             nilai++;
         });

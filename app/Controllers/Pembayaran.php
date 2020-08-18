@@ -24,7 +24,7 @@ class Pembayaran extends BaseController
             [
                 'title' => 'Pembayaran',
                 'active' => 'pembayaran',
-                'notifications' => $this->notifications->select('notifications.id, nama_pelanggan, detail_merk, kendala')
+                'notifications' => $this->notifications->select('notifications.id, pelanggan.nama_pelanggan, merk.detail_merk, notifications.kendala')
                     ->join('pelanggan', 'pelanggan.id = notifications.pelanggan')
                     ->join('merk', 'merk.id = notifications.motor')
                     ->findAll()
@@ -40,7 +40,7 @@ class Pembayaran extends BaseController
     }
     public function dataNotifications()
     {
-        $result = $this->notifications->select('notifications.id, nama_pelanggan, detail_merk, kendala')
+        $result = $this->notifications->select('notifications.id, pelanggan.nama_pelanggan, merk.detail_merk, notifications.kendala')
             ->join('pelanggan', 'pelanggan.id = notifications.pelanggan')
             ->join('merk', 'merk.id = notifications.motor')
             ->findAll();
@@ -136,5 +136,29 @@ class Pembayaran extends BaseController
         $this->notifications->delete($this->request->getVar('id'));
         session()->setFlashdata('pesan', 'Pembayaran berhasil di lakukan');
         return redirect()->to('/pembayaran');
+    }
+    public function history()
+    {
+        $data =
+            [
+                'title' => 'History',
+                'active' => 'history',
+                'transaksi' => $this->transaksi->select('*')
+                    ->join('pelanggan', 'pelanggan.id = transaksi.pelanggan_id')
+                    ->join('merk', 'merk.id = transaksi.merk_id')
+                    ->where('tanggal', Time::now('Asia/Jakarta')
+                        ->toDateString())
+                    ->findAll()
+            ];
+        return view('user/history', $data);
+    }
+    public function tampilTotal()
+    {
+        if ($this->request->isAJAX()) {
+            $barang = $this->request->getPost('barang');
+            $jumlah = $this->request->getPost('jumlah');
+            $result = $this->barang->where('id', $barang)->first()['harga_jual'] * $jumlah;
+            echo json_encode($result);
+        }
     }
 }

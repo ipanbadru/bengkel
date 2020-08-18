@@ -87,6 +87,12 @@
                                 <span class="nav-link-text">Pembayaran</span>
                             </a>
                         </li>
+                        <li class="nav-item">
+                            <a class="nav-link <?= ($active == 'history') ? 'active' : ''; ?>" href="/pembayaran/history">
+                                <i class="ni ni-chart-pie-35 text-primary"></i>
+                                <span class="nav-link-text">Pembayaran hari ini</span>
+                            </a>
+                        </li>
                     <?php endif; ?>
                     <?php if (session()->get('role') == 'customer') : ?>
                         <li class="nav-item">
@@ -108,6 +114,12 @@
                         <a class="nav-link <?= ($active == 'pembayaran') ? 'active' : ''; ?>" href="/pembayaran">
                             <i class="ni ni-laptop text-red pembayaran"></i>
                             <span class="nav-link-text">Pembayaran</span>
+                        </a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link <?= ($active == 'history') ? 'active' : ''; ?>" href="/pembayaran/history">
+                            <i class="ni ni-chart-pie-35 text-primary"></i>
+                            <span class="nav-link-text">pembayaran hari ini</span>
                         </a>
                     </li>
                 <?php endif ?>
@@ -177,6 +189,9 @@
                 success: function(data) {
                     if (data == 0) {
                         $('.pembayaran').html('');
+                    } else {
+                        console.log(data);
+                        $('.pembayaran').html(data);
                     }
                 }
             });
