@@ -27,26 +27,27 @@
                     <?php if ($transaksi == []) : ?>
                         <h1 class="text text-center">Belum Ada pembayaran hari ini</h1>
                     <?php else : ?>
+                        <h2>Jumlah pembayaran hari ini : <?= $jumlah; ?></h2>
                         <table class="table table-bordered">
                             <thead class="thead-light">
                                 <tr>
                                     <th scope="col">
-                                        <b>No</b>
+                                        <h4>No</h4>
                                     </th>
                                     <th scope="col">
-                                        <b>Nama Pelanggan</b>
+                                        <h4>Nama Pelanggan</h4>
                                     </th>
                                     <th scope="col">
-                                        <b>Merk Motor</b>
+                                        <h4>Merk Motor</h4>
                                     </th>
                                     <th scope="col">
-                                        <b>Keterangan</b>
+                                        <h4>Keterangan</h4>
                                     </th>
                                     <th scope="col">
-                                        <b>Waktu Servis</b>
+                                        <h4>Waktu Servis</h4>
                                     </th>
                                     <th scope="col">
-                                        <b>Total Harga</b>
+                                        <h4>Total Harga</h4>
                                     </th>
                                 </tr>
                             </thead>

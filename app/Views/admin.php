@@ -1,24 +1,15 @@
 <?= $this->extend('layout/app'); ?>
 <?= $this->section('content'); ?>
+<!-- <?php foreach ($transaksi as $t) {
+            $tanggal[] = $t['tanggal'];
+            $tanggal = array_unique($tanggal);
+        }
+        foreach ($tanggal as $t) {
+        }
+        ?> -->
 <div class="header bg-primary pb-6">
     <div class="container-fluid">
         <div class="header-body">
-            <div class="row align-items-center py-4">
-                <div class="col-lg-6 col-7">
-                    <h6 class="h2 text-white d-inline-block mb-0">Default</h6>
-                    <nav aria-label="breadcrumb" class="d-none d-md-inline-block ml-md-4">
-                        <ol class="breadcrumb breadcrumb-links breadcrumb-dark">
-                            <li class="breadcrumb-item"><a href="#"><i class="fas fa-home"></i></a></li>
-                            <li class="breadcrumb-item"><a href="#">Dashboards</a></li>
-                            <li class="breadcrumb-item active" aria-current="page">Default</li>
-                        </ol>
-                    </nav>
-                </div>
-                <div class="col-lg-6 col-5 text-right">
-                    <a href="#" class="btn btn-sm btn-neutral">New</a>
-                    <a href="#" class="btn btn-sm btn-neutral">Filters</a>
-                </div>
-            </div>
             <!-- Card stats -->
             <div class="row">
                 <div class="col-xl-3 col-md-6">
@@ -27,19 +18,15 @@
                         <div class="card-body">
                             <div class="row">
                                 <div class="col">
-                                    <h5 class="card-title text-uppercase text-muted mb-0">Total traffic</h5>
-                                    <span class="h2 font-weight-bold mb-0">350,897</span>
+                                    <h5 class="card-title text-uppercase text-muted mb-0">Jumlah Pelanggan</h5>
+                                    <span class="h2 font-weight-bold mb-0"><?= $jumlah_pelanggan; ?></span>
                                 </div>
                                 <div class="col-auto">
-                                    <div class="icon icon-shape bg-gradient-red text-white rounded-circle shadow">
-                                        <i class="ni ni-active-40"></i>
+                                    <div class="ni icon-shape bg-gradient-red text-white rounded-circle shadow">
+                                        <i class="ni ni-single-02"></i>
                                     </div>
                                 </div>
                             </div>
-                            <p class="mt-3 mb-0 text-sm">
-                                <span class="text-success mr-2"><i class="fa fa-arrow-up"></i> 3.48%</span>
-                                <span class="text-nowrap">Since last month</span>
-                            </p>
                         </div>
                     </div>
                 </div>
@@ -49,8 +36,8 @@
                         <div class="card-body">
                             <div class="row">
                                 <div class="col">
-                                    <h5 class="card-title text-uppercase text-muted mb-0">New users</h5>
-                                    <span class="h2 font-weight-bold mb-0">2,356</span>
+                                    <h5 class="card-title text-uppercase text-muted mb-0">Jumlah Stok barang</h5>
+                                    <span class="h2 font-weight-bold mb-0"><?= $jumlah_stok['stok']; ?></span>
                                 </div>
                                 <div class="col-auto">
                                     <div class="icon icon-shape bg-gradient-orange text-white rounded-circle shadow">
@@ -58,10 +45,6 @@
                                     </div>
                                 </div>
                             </div>
-                            <p class="mt-3 mb-0 text-sm">
-                                <span class="text-success mr-2"><i class="fa fa-arrow-up"></i> 3.48%</span>
-                                <span class="text-nowrap">Since last month</span>
-                            </p>
                         </div>
                     </div>
                 </div>
@@ -71,8 +54,8 @@
                         <div class="card-body">
                             <div class="row">
                                 <div class="col">
-                                    <h5 class="card-title text-uppercase text-muted mb-0">Sales</h5>
-                                    <span class="h2 font-weight-bold mb-0">924</span>
+                                    <h5 class="card-title text-uppercase text-muted mb-0">Jumlah Transaksi</h5>
+                                    <span class="h2 font-weight-bold mb-0"><?= $jumlah_transaksi; ?></span>
                                 </div>
                                 <div class="col-auto">
                                     <div class="icon icon-shape bg-gradient-green text-white rounded-circle shadow">
@@ -80,10 +63,6 @@
                                     </div>
                                 </div>
                             </div>
-                            <p class="mt-3 mb-0 text-sm">
-                                <span class="text-success mr-2"><i class="fa fa-arrow-up"></i> 3.48%</span>
-                                <span class="text-nowrap">Since last month</span>
-                            </p>
                         </div>
                     </div>
                 </div>
@@ -93,8 +72,8 @@
                         <div class="card-body">
                             <div class="row">
                                 <div class="col">
-                                    <h5 class="card-title text-uppercase text-muted mb-0">Performance</h5>
-                                    <span class="h2 font-weight-bold mb-0">49,65%</span>
+                                    <h5 class="card-title text-uppercase text-muted mb-0"> Transaksi hari ini</h5>
+                                    <span class="h2 font-weight-bold mb-0"><?= $transaksi_today ?></span>
                                 </div>
                                 <div class="col-auto">
                                     <div class="icon icon-shape bg-gradient-info text-white rounded-circle shadow">
@@ -102,10 +81,6 @@
                                     </div>
                                 </div>
                             </div>
-                            <p class="mt-3 mb-0 text-sm">
-                                <span class="text-success mr-2"><i class="fa fa-arrow-up"></i> 3.48%</span>
-                                <span class="text-nowrap">Since last month</span>
-                            </p>
                         </div>
                     </div>
                 </div>
@@ -146,7 +121,7 @@
                     <!-- Chart -->
                     <div class="chart">
                         <!-- Chart wrapper -->
-                        <canvas id="chart-sales-dark" class="chart-canvas"></canvas>
+                        <canvas id="chart-sales" class="chart-canvas"></canvas>
                     </div>
                 </div>
             </div>
@@ -389,5 +364,38 @@
             </div>
         </div>
     </div>
+    <?= $this->endSection(); ?>
+    <?= $this->section('script'); ?>
+    <script>
+        var ctx = document.getElementById('chart-sales');
+        var myChart = new Chart(ctx, {
+            type: 'bar',
+            data: {
+                x: 5,
+                y: 10,
+                labels: <?= json_encode($tanggal); ?>,
+                datasets: [{
+                    label: 'Grafik transaksi',
+                    data: <?= json_encode($jumlah_transaksi_perhari); ?>,
+                    backgroundColor: [
+                        'rgba(255, 99, 132, 0.2)',
+                    ],
+                    borderColor: [
+                        '#0000FF',
+                    ],
+                    borderWidth: 3
+                }]
+            },
+            options: {
+                scales: {
+                    yAxes: [{
+                        ticks: {
+                            beginAtZero: true
+                        }
+                    }]
+                }
+            }
+        });
+    </script>
     <?= $this->endSection(); ?>
     <!-- Footer -->

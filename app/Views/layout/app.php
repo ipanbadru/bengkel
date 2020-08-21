@@ -15,6 +15,8 @@
     <!-- Page plugins -->
     <!-- Argon CSS -->
     <link rel="stylesheet" href="/assets/css/argon.css?v=1.2.0" type="text/css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/Chart.js/2.9.3/Chart.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/Chart.js/2.9.3/Chart.min.css">
 </head>
 
 <body>
@@ -176,9 +178,12 @@
     <script src="/assets/vendor/jquery.scrollbar/jquery.scrollbar.min.js"></script>
     <script src="/assets/vendor/jquery-scroll-lock/dist/jquery-scrollLock.min.js"></script>
     <!-- Optional JS -->
-    <script src="/assets/vendor/chart.js/dist/Chart.min.js"></script>
-    <script src="/assets/vendor/chart.js/dist/Chart.extension.js"></script>
+    <!-- <script src="/assets/vendor/chart.js/dist/Chart.min.js"></script> -->
+    <!-- <script src="/assets/vendor/chart.js/dist/Chart.extension.js"></script> -->
     <!-- Argon JS -->
+    <script src="https://cdn.jsdelivr.net/npm/chart.js@2.8.0"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/Chart.js/2.9.3/Chart.bundle.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/Chart.js/2.9.3/Chart.bundle.min.js"></script>
     <script src="/assets/js/argon.js?v=1.2.0"></script>
     <script>
         $(document).ready(function() {

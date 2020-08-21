@@ -143,11 +143,13 @@ class Pembayaran extends BaseController
             [
                 'title' => 'History',
                 'active' => 'history',
+                'jumlah' => $this->transaksi->where('tanggal', Time::now('Asia/Jakarta')->toDateString())
+                    ->countAllResults(),
                 'transaksi' => $this->transaksi->select('*')
                     ->join('pelanggan', 'pelanggan.id = transaksi.pelanggan_id')
                     ->join('merk', 'merk.id = transaksi.merk_id')
-                    ->where('tanggal', Time::now('Asia/Jakarta')
-                        ->toDateString())
+                    ->where('tanggal', Time::now('Asia/Jakarta')->toDateString())
+                    ->orderBy('no_transaksi', 'DESC')
                     ->findAll()
             ];
         return view('user/history', $data);
