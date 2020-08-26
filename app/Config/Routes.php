@@ -47,9 +47,12 @@ $routes->get('/montir', 'montir::index', ['filter' => 'admin']);
 $routes->delete('/montir/(:num)', 'montir::delete/$1', ['filter' => 'admin']);
 
 //pelanggan
-$routes->get('/pelanggan/index', 'pelanggan::index', ['filter' => 'customer']);
+$routes->group('/pelanggan', ['filter' => 'customer'], function ($routes) {
+	$routes->resource('index');
+	$routes->add('tambah', 'pelanggan::tambah');
+});
 $routes->get('/pelanggan', 'pelanggan::index', ['filter' => 'customer']);
-$routes->get('/pelanggan/tambah', 'pelanggan::tambah', ['filter' => 'customer']);
+// $routes->get('/pelanggan/tambah', 'pelanggan::tambah');
 $routes->get('/pelanggan', 'pelanggan::save', ['filter' => 'customer']);
 $routes->get('/pelanggan/edit/(:num)', 'pelanggan::edit/$1', ['filter' => 'customer']);
 $routes->get('/pelanggan/update', 'pelanggan::update', ['filter' => 'customer']);

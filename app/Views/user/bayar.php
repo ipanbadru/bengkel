@@ -123,13 +123,15 @@
             $('.nilai' + nilai).click(function() {
                 let barang = $('#pengeluaran_barang').val();
                 $('#pengeluaran_barang').val(barang - 1);
-                const sub_harga = $(this).parent().parent().children('.col-sm-3').children('.input-group').children('input').val();
-                $('#harga_total').val(parseInt($('#harga_total').val().replace(/\./g, '')) - parseInt(sub_harga.replace(/\./g, '')));
-                if ($('#harga_total').val() == 0) {
-                    $('#harga_total').val('');
-                    $('#harga_total').attr('readonly', false);
-                } else {
-                    $('#harga_total').simpleMoneyFormat();
+                if ($('#harga_total').val() != '') {
+                    const sub_harga = $(this).parent().parent().children('.col-sm-3').children('.input-group').children('input').val();
+                    $('#harga_total').val(parseInt($('#harga_total').val().replace(/\./g, '')) - parseInt(sub_harga.replace(/\./g, '')));
+                    if ($('#harga_total').val() == 0) {
+                        $('#harga_total').val('');
+                        $('#harga_total').attr('readonly', false);
+                    } else {
+                        $('#harga_total').simpleMoneyFormat();
+                    }
                 }
                 $(this).parent().parent().remove();
             });

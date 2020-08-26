@@ -109,30 +109,29 @@
                                 <span class="nav-link-text">Transaksi</span>
                             </a>
                         </li>
+                    <?php endif ?>
+                    <?php if (session()->get('role') == 'kasir') : ?>
+                        <li class="nav-item">
+                            <a class="nav-link <?= ($active == 'pembayaran') ? 'active' : ''; ?>" href="/pembayaran">
+                                <i class="ni ni-laptop text-red pembayaran"></i>
+                                <span class="nav-link-text">Pembayaran</span>
+                            </a>
+                        </li>
+                        <li class="nav-item">
+                            <a class="nav-link <?= ($active == 'history') ? 'active' : ''; ?>" href="/pembayaran/history">
+                                <i class="ni ni-chart-pie-35 text-primary"></i>
+                                <span class="nav-link-text">pembayaran hari ini</span>
+                            </a>
+                        </li>
+                    <?php endif ?>
+                    <li class="nav-item">
+                        <a class="nav-link" href="/logout" onclick="return confirm('Yakin?');">
+                            <i class="ni ni-key-25 text-info"></i>
+                            <span class="nav-link-text">Logout</span>
+                        </a>
+                    </li>
                     </ul>
-                <?php endif ?>
-                <?php if (session()->get('role') == 'kasir') : ?>
-                    <li class="nav-item">
-                        <a class="nav-link <?= ($active == 'pembayaran') ? 'active' : ''; ?>" href="/pembayaran">
-                            <i class="ni ni-laptop text-red pembayaran"></i>
-                            <span class="nav-link-text">Pembayaran</span>
-                        </a>
-                    </li>
-                    <li class="nav-item">
-                        <a class="nav-link <?= ($active == 'history') ? 'active' : ''; ?>" href="/pembayaran/history">
-                            <i class="ni ni-chart-pie-35 text-primary"></i>
-                            <span class="nav-link-text">pembayaran hari ini</span>
-                        </a>
-                    </li>
-                <?php endif ?>
-                <li class="nav-item">
-                    <a class="nav-link" href="/logout" onclick="return confirm('Yakin?');">
-                        <i class="ni ni-key-25 text-info"></i>
-                        <span class="nav-link-text">Logout</span>
-                    </a>
-                </li>
-                </ul>
-                <!-- Navigation -->
+                    <!-- Navigation -->
                 </div>
             </div>
         </div>

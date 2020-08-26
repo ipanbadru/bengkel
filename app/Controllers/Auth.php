@@ -115,7 +115,7 @@ class Auth extends BaseController
                 'nama' => $this->request->getVar('nama'),
                 'username' => $this->request->getVar('username'),
                 'role' => $this->request->getVar('role'),
-                'password' => $this->request->getVar('nama'),
+                'password' => password_hash($this->request->getVar('password1'), PASSWORD_DEFAULT),
             ];
         $this->tb_user->save($data);
         session()->setFlashdata('pesan', 'User baru telah di tambahkan dengan role ' . $this->request->getVar('role'));

@@ -27,6 +27,9 @@
                                     </div>
                                 </div>
                             </div>
+                            <p class="mt-1 mb-0 text-sm">
+                                <span class="text-success mr-2"><a href="/pelanggan">Lihat detail pelanggan</a></span>
+                            </p>
                         </div>
                     </div>
                 </div>
@@ -45,6 +48,9 @@
                                     </div>
                                 </div>
                             </div>
+                            <p class="mt-1 mb-0 text-sm">
+                                <span class="text-success mr-2"><a href="/barang">Lihat detail barang</a></span>
+                            </p>
                         </div>
                     </div>
                 </div>
@@ -63,6 +69,9 @@
                                     </div>
                                 </div>
                             </div>
+                            <p class="mt-1 mb-0 text-sm">
+                                <span class="text-success mr-2"><a href="/admin/dataTransaksi">Lihat Detail Transaksi</a></span>
+                            </p>
                         </div>
                     </div>
                 </div>
@@ -81,6 +90,9 @@
                                     </div>
                                 </div>
                             </div>
+                            <p class="mt-1 mb-0 text-sm">
+                                <span class="text-success mr-2"><a href="/pembayaran/history">Lihat Transaksi Hari ini</a></span>
+                            </p>
                         </div>
                     </div>
                 </div>
@@ -101,44 +113,74 @@
             </div>
         </div>
     </div>
-</div>
-<?= $this->endSection(); ?>
-<?= $this->section('script'); ?>
-<script>
-    var ctx = document.getElementById('myChart');
-    var myChart = new Chart(ctx, {
-        type: 'line',
-        data: {
-            labels: <?= json_encode($nama_barang); ?>,
-            datasets: [{
-                label: 'Stok',
-                data: <?= json_encode($jumlah_barang); ?>,
-                backgroundColor: [
-                    'rgba(0, 0, 0, 0.1)'
+    <div class="row">
+        <div class="col-xl-8">
+            <div class="card">
+                <div class="card-header border-0">
+                    <div class="row align-items-center">
+                        <div class="col">
+                            <h3 class="mb-0">Pelanggan Paling sering datang</h3>
+                        </div>
+                    </div>
+                </div>
+                <div class="table-responsive">
+                    <!-- Projects table -->
+                    <table class="table align-items-center table-flush">
+                        <thead class="thead-light">
+                            <tr>
+                                <th scope="col">Nama Pelanggan</th>
+                                <th scope="col">No telepon</th>
+                                <th scope="col">Alamat</th>
+                                <th scope="col">Datang</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            <?php $no = 0; ?>
+                            <?php foreach ($pelanggan as $p) : ?>
+                                <tr>
+                                    <th scope="row"><?= $p['nama_pelanggan']; ?></th>
+                                    <td><?= $p['no_hp']; ?></td>
+                                    <td><?= $p['alamat']; ?></td>
+                                    <td><?= $p['jml_datang']; ?> kali</td>
+                                </tr>
+                            <?php endforeach; ?>
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+        </div>
+    </div>
+    <?= $this->endSection(); ?>
+    <?= $this->section('script'); ?>
+    <script>
+        var ctx = document.getElementById('myChart');
+        var myChart = new Chart(ctx, {
+            type: 'line',
+            data: {
+                labels: <?= json_encode($nama_barang); ?>,
+                datasets: [{
+                    label: 'Stok',
+                    data: <?= json_encode($jumlah_barang); ?>,
+                    backgroundColor: [
+                        'rgba(137, 196, 244, 1)'
 
-                ],
-                borderColor: [
-                    // 'rgba(255, 99, 132, 1)',
-                    // 'rgba(54, 162, 235, 1)',
-                    // 'rgba(255, 206, 86, 1)',
-                    // 'rgba(75, 192, 192, 1)',
-                    // 'rgba(153, 102, 255, 1)',
-                    // 'rgba(255, 159, 64, 1)'
-                    'blue'
-                ],
-                borderWidth: 3
-            }]
-        },
-        options: {
-            scales: {
-                yAxes: [{
-                    ticks: {
-                        beginAtZero: true
-                    }
+                    ],
+                    borderColor: [
+                        'blue'
+                    ],
+                    borderWidth: 3
                 }]
+            },
+            options: {
+                scales: {
+                    yAxes: [{
+                        ticks: {
+                            beginAtZero: true
+                        }
+                    }]
+                }
             }
-        }
-    });
-</script>
-<?= $this->endSection(); ?>
-<!-- Footer -->
+        });
+    </script>
+    <?= $this->endSection(); ?>
+    <!-- Footer -->

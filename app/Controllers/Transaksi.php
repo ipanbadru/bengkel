@@ -67,6 +67,12 @@ class Transaksi extends BaseController
             return redirect()->to('/transaksi')->withInput();
         }
         $user = $this->user->where('username', session()->get('username'))->first();
+        $pelanggan = \Config\Database::connect()->table('pelanggan');
+        $pelangganDatang = $pelanggan->where('id', $this->request->getVar('nama'))->get()->getRowArray();
+        $jml_datang = $pelangganDatang['jml_datang'] + 1;
+        $pelanggan->set('jml_datang', $jml_datang);
+        $pelanggan->where('id', $this->request->getVar('nama'));
+        $pelanggan->update();
         $data =
             [
                 'time' => Time::now('Asia/Jakarta')->toTimeString(),

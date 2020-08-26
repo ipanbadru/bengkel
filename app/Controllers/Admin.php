@@ -9,39 +9,49 @@ use CodeIgniter\I18n\Time;
 
 class Admin extends BaseController
 {
+    protected $barang, $pelanggan, $transaksi;
+    public function __construct()
+    {
+        $this->barang = new barangModel();
+        $this->pelanggan =  new pelangganModel();
+        $this->transaksi = new transaksiModel();
+    }
     public function index()
     {
-        $barang = new barangModel();
-        $pelanggan =  new pelangganModel();
-        $transaksi = new transaksiModel();
-        $trns = $transaksi->orderBy('tanggal', 'ASC')->findAll();
-        foreach ($trns as $t) {
-            $tanggal[] = $t['tanggal'];
-            $tanggal = array_unique($tanggal);
-        }
-        foreach ($tanggal as $tgl) {
-            $jumlah_transaksi[] = $transaksi->where('tanggal', $tgl)->countAllResults();
-        }
-        foreach ($barang->findAll() as $b) {
+        foreach ($this->barang->findAll() as $b) {
             $nama_barang[] = $b['barang'];
         }
         foreach ($nama_barang as $b) {
-            $jumlah_barang[] = $barang->where('barang', $b)->first()['stok'];
+            $jumlah_barang[] = $this->barang->where('barang', $b)->first()['stok'];
         }
         $data =
             [
                 'active' => 'dashboard',
                 'title' => 'Dashboard',
-                'transaksi' => $transaksi->findAll(),
-                'jumlah_transaksi_perhari' => $jumlah_transaksi,
+                'transaksi' => $this->transaksi->findAll(),
                 'nama_barang' => $nama_barang,
+                'pelanggan' => $this->pelanggan->orderBy('jml_datang', 'DESC')->get(5)->getResultArray(),
                 'jumlah_barang' => $jumlah_barang,
-                'tanggal' => array_unique($tanggal),
-                'jumlah_pelanggan' => $pelanggan->countAll(),
-                'jumlah_stok' => $barang->selectSum('stok')->first(),
-                'jumlah_transaksi' => $transaksi->countAll(),
-                'transaksi_today' => $transaksi->where('tanggal', Time::now('Asia/Jakarta')->toDateString())->countAllResults()
+                'jumlah_pelanggan' => $this->pelanggan->countAll(),
+                'jumlah_stok' => $this->barang->selectSum('stok')->first(),
+                'jumlah_transaksi' => $this->transaksi->countAll(),
+                'transaksi_today' => $this->transaksi->where('tanggal', Time::now('Asia/Jakarta')->toDateString())->countAllResults()
             ];
-        return view('admin', $data);
+        return view('admin/dashboard', $data);
+    }
+    public function dataTransaksi()
+    {
+        $data =
+            [
+                'title' => 'Data Transaksi',
+                'active' => 'dashboard',
+                'jumlah' => $this->transaksi->countAll(),
+                'transaksi' => $this->transaksi->select('*')
+                    ->join('pelanggan', 'pelanggan.id = transaksi.pelanggan_id')
+                    ->join('merk', 'merk.id = transaksi.merk_id')
+                    ->orderBy('tanggal', 'DESC')
+                    ->findAll()
+            ];
+        return view('admin/dataTransaksi', $data);
     }
 }

@@ -11,7 +11,7 @@
         <div class=" col ">
             <div class="card">
                 <div class="card-header bg-transparent">
-                    <h2 class="mb-2"><i class="ni ni-chart-pie-35 mr-2"></i>History Pembayaran hari ini</h2>
+                    <h2 class="mb-2"><i class="ni ni-chart-pie-35 mr-2"></i>History Pembayaran/Transaksi hari ini</h2>
                 </div>
                 <div class="session">
                     <?php if (session()->getFlashdata('pesan')) : ?>
@@ -25,7 +25,7 @@
                 </div>
                 <div class="card-body">
                     <?php if ($transaksi == []) : ?>
-                        <h1 class="text text-center">Belum Ada pembayaran hari ini</h1>
+                        <h1 class="text text-center">Belum Ada Pembayaran/Transaksi hari ini</h1>
                     <?php else : ?>
                         <h2>Jumlah pembayaran hari ini : <?= $jumlah; ?></h2>
                         <table class="table table-bordered">
@@ -57,7 +57,7 @@
                                     <tr>
                                         <th scope="row"><?= $no++; ?></th>
                                         <td><?= $t['nama_pelanggan']; ?></td>
-                                        <td><?= $t['merk']; ?></td>
+                                        <td><?= $t['merk_motor']; ?></td>
                                         <td><?= $t['keterangan']; ?></td>
                                         <td><?= $t['waktu_servis']; ?></td>
                                         <td>Rp.<?= $t['total']; ?></td>
