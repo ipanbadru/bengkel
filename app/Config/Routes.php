@@ -32,7 +32,6 @@ $routes->setAutoRoute(true);
 // We get a performance increase by specifying the default
 // route since we don't have to scan directories.
 //Auth
-$routes->get('/auth/index', 'Auth::index', ['filter' => 'no_auth']);
 $routes->get('/', 'Auth::index', ['filter' => 'no_auth']);
 $routes->get('/auth/registrasi', 'auth::registrasi', ['filter' => 'admin']);
 $routes->get('/registrasi', 'auth::registrasi', ['filter' => 'admin']);
@@ -43,29 +42,42 @@ $routes->get('/auth/logout', 'auth::logout', ['filter' => 'auth']);
 $routes->get('/admin', 'admin::index', ['filter' => 'admin']);
 
 //Montir
-$routes->get('/montir', 'montir::index', ['filter' => 'admin']);
-$routes->delete('/montir/(:num)', 'montir::delete/$1', ['filter' => 'admin']);
+$routes->group('/montir', ['filter' => 'admin'], function ($routes) {
+	$routes->add('', 'montir::index');
+	$routes->add('index', 'montir::index');
+	$routes->delete('(:num)', 'montir::delete/$1');
+});
 
 //pelanggan
 $routes->group('/pelanggan', ['filter' => 'customer'], function ($routes) {
-	$routes->resource('index');
+	$routes->add('', 'pelanggan::index');
+	$routes->add('index', 'pelanggan::index');
 	$routes->add('tambah', 'pelanggan::tambah');
+	$routes->add('save', 'pelanggan::save');
+	$routes->add('edit/(:num)', 'pelanggan::edit/$1');
+	$routes->add('update', 'pelanggan::update');
+	$routes->delete('(:num)', 'pelanggan::delete/$1');
 });
-$routes->get('/pelanggan', 'pelanggan::index', ['filter' => 'customer']);
-// $routes->get('/pelanggan/tambah', 'pelanggan::tambah');
-$routes->get('/pelanggan', 'pelanggan::save', ['filter' => 'customer']);
-$routes->get('/pelanggan/edit/(:num)', 'pelanggan::edit/$1', ['filter' => 'customer']);
-$routes->get('/pelanggan/update', 'pelanggan::update', ['filter' => 'customer']);
-$routes->delete('/pelanggan/(:num)', 'pelanggan::delete/$1');
 
 //Barang
-$routes->get('/barang/index', 'barang::index', ['filter' => 'customer']);
-$routes->get('/barang', 'barang::index', ['filter' => 'customer']);
-$routes->get('/barang/tambah', 'barang::tambah', ['filter' => 'customer']);
-$routes->get('/barang/save', 'barang::save', ['filter' => 'customer']);
-$routes->get('/barang/edit/(:num)', 'barang::edit/$1', ['filter' => 'customer']);
-$routes->get('/barang/update', 'barang::update', ['filter' => 'customer']);
-$routes->delete('/barang/(:num)', 'barang::delete/$1', ['filter' => 'customer']);
+$routes->group('/barang', ['filter' => 'admin'], function ($routes) {
+	$routes->add('index', 'barang::index');
+	$routes->add('', 'barang::index');
+	$routes->add('tambah', 'barang::tambah');
+	$routes->add('save', 'barang::save');
+	$routes->add('edit/(:num)', 'barang::edit/$1');
+	$routes->add('update', 'barang::update');
+	$routes->delete('(:num)', 'barang::delete/$1');
+});
+
+//pembayaran
+$routes->group('/pembayaran', ['filter' => 'kasir'],  function ($routes) {
+	$routes->add('', 'pembayaran::index');
+	$routes->add('index', 'pembayaran::index');
+	$routes->add('history', 'pembayaran::history');
+	$routes->add('bayar/(:num)', 'pembayaran::bayar/$1');
+	$routes->add('transaksi', 'pembayaran::transaksi');
+});
 
 /**
  * --------------------------------------------------------------------

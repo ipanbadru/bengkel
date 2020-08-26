@@ -13,12 +13,16 @@ class Pelanggan extends BaseController
     }
     public function index()
     {
+        $currentPage = $this->request->getVar('page_pelanggan') ? $this->request->getVar('page_pelanggan') : 1;
+        $keyword = $this->request->getVar('keyword');
         $data =
             [
                 'title' => 'Pelanggan',
                 'active' => 'pelanggan',
                 'jumlah' => $this->pelanggan->countAll(),
-                'pelanggan' => $this->pelanggan->findAll()
+                'pelanggan' => $keyword ? $this->pelanggan->like('nama_pelanggan', $keyword)->paginate(5, 'pelanggan') : $this->pelanggan->paginate(5, 'pelanggan'),
+                'pager' => $this->pelanggan->pager,
+                'currentPage' => $currentPage
             ];
         return view('pelanggan/index', $data);
     }

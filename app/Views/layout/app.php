@@ -156,6 +156,7 @@
                         </button>
                     </form> -->
                     <!-- Navbar links -->
+                    <?= $this->renderSection('search'); ?>
                     <div class="media align-items-right">
                         <span class="avatar avatar-sm rounded-circle">
                             <img src="/img/profile.png">

@@ -13,7 +13,7 @@ class Kasir implements FilterInterface
         if (!session()->has('isLoggedIn')) {
             return redirect()->to('/');
         }
-        if (session()->get('role') != 'kasir' || session()->get('role') != 'admin') {
+        if (session()->get('role') == 'customer') {
             return redirect()->to('/pelanggan');
         }
     }

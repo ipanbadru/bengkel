@@ -13,12 +13,16 @@ class Barang extends BaseController
     }
     public function index()
     {
+        $currentPage = $this->request->getVar('page_barang') ? $this->request->getVar('page_barang') : 1;
+        $keyword = $this->request->getVar('keyword');
         $data =
             [
                 'title' => 'Barang',
                 'active' => 'barang',
                 'jumlah' => $this->barang->countAll(),
-                'barang' => $this->barang->findAll()
+                'barang' => $keyword ? $this->barang->like('barang', $keyword)->paginate(5, 'barang') : $this->barang->paginate(5, 'barang'),
+                'pager' => $this->barang->pager,
+                'currentPage' => $currentPage
             ];
         return view('barang/index', $data);
     }

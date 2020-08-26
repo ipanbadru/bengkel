@@ -1,4 +1,16 @@
 <?= $this->extend('layout/app'); ?>
+<?= $this->section('search'); ?>
+<form class="navbar-search navbar-search-light form-inline mr-sm-3" id="navbar-search-main" action="/barang" method="post">
+    <div class="form-group mb-0">
+        <div class="input-group input-group-alternative input-group-merge">
+            <div class="input-group-prepend">
+                <span class="input-group-text"><i class="fas fa-search"></i></span>
+            </div>
+            <input class="form-control" autocomplete="off" placeholder="Cari barang...." name="keyword" type="text">
+        </div>
+    </div>
+</form>
+<?= $this->endSection(); ?>
 <?= $this->section('content'); ?>
 <div class="header bg-primary pb-6">
     <div class="container-fluid">
@@ -28,11 +40,11 @@
                     <div class="container">
                         <a href="/barang/tambah" class="btn btn-primary mb-3 mt--3">
                             <i class="ni ni-send mr-2"></i>Tambah Barang</a>
-                        <h2 class="float-right">Jumlah Barang : <?= $jumlah; ?></h2>
+                        <h2 class="float-right">Jumlah Semua Barang : <?= $jumlah; ?></h2>
                         <div class="row">
                             <div class="col-md">
 
-                                <table class="table table-bordered">
+                                <table class="table table-bordered mb-4">
                                     <thead>
                                         <tr>
                                             <th class="table-active">
@@ -56,7 +68,7 @@
                                         </tr>
                                     </thead>
                                     <tbody>
-                                        <?php $no = 1; ?>
+                                        <?php $no = 1  + (5 * ($currentPage - 1)); ?>
                                         <?php foreach ($barang as $b) : ?>
                                             <tr>
                                                 <th scope="row"><?= $no++; ?></th>
@@ -76,6 +88,7 @@
                                         <?php endforeach; ?>
                                     </tbody>
                                 </table>
+                                <div class="col-8 float-right"><?= $pager->links('barang', 'my_pagination'); ?></div>
                             </div>
                         </div>
                     </div>

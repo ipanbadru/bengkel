@@ -13,12 +13,16 @@ class Montir extends BaseController
     }
     public function index()
     {
+        $currentPage = $this->request->getVar('page_montir') ? $this->request->getVar('page_montir') : 1;
+        $keyword = $this->request->getVar('keyword');
         $data =
             [
                 'title' => 'Montir',
                 'active' => 'montir',
                 'jumlah' => $this->montir->countAll(),
-                'montir' => $this->montir->findAll()
+                'montir' => $keyword ? $this->montir->like('nama_montir', $keyword)->paginate(5, 'montir') : $this->montir->paginate(5, 'montir'),
+                'pager' => $this->montir->pager,
+                'currentPage' => $currentPage
             ];
         return view('montir/index', $data);
     }
