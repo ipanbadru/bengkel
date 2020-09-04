@@ -44,7 +44,7 @@ class Admin extends BaseController
         $currentPage = $this->request->getVar('page_transaksi') ? $this->request->getVar('page_transaksi') : 1;
         $keyword = $this->request->getVar('keyword');
         if ($keyword) {
-            $transaksi = $this->transaksi->select('*')
+            $transaksi = $this->transaksi->select('transaksi.id, pelanggan.nama_pelanggan, transaksi.tanggal, transaksi.waktu_servis, transaksi.total')
                 ->join('pelanggan', 'pelanggan.id = transaksi.pelanggan_id')
                 ->join('merk', 'merk.id = transaksi.merk_id')
                 ->orderBy('transaksi.tanggal', 'DESC')
@@ -52,7 +52,7 @@ class Admin extends BaseController
                 ->orLike('tanggal', $keyword)
                 ->paginate(7, 'transaksi');
         } else {
-            $transaksi = $this->transaksi->select('*')
+            $transaksi = $this->transaksi->select('transaksi.id, pelanggan.nama_pelanggan, transaksi.tanggal, transaksi.waktu_servis, transaksi.total')
                 ->join('pelanggan', 'pelanggan.id = transaksi.pelanggan_id')
                 ->join('merk', 'merk.id = transaksi.merk_id')
                 ->orderBy('transaksi.tanggal', 'DESC')
@@ -68,5 +68,17 @@ class Admin extends BaseController
                 'currentPage' => $currentPage,
             ];
         return view('admin/dataTransaksi', $data);
+    }
+    public function detailTransaksi()
+    {
+        if ($this->request->isAJAX()) {
+            $id = $this->request->getVar('id');
+            $result = $this->transaksi->select('transaksi.id, pelanggan.nama_pelanggan, transaksi.tanggal, transaksi.waktu_servis, transaksi.total, transaksi.kendala, transaksi.keterangan, transaksi.pengeluaran_barang, merk.merk_motor')
+                ->join('pelanggan', 'pelanggan.id = transaksi.pelanggan_id')
+                ->join('merk', 'merk.id = transaksi.merk_id')
+                ->where('transaksi.id', $id)
+                ->first();
+            return json_encode($result);
+        }
     }
 }

@@ -40,6 +40,7 @@ $routes->get('/auth/logout', 'auth::logout', ['filter' => 'auth']);
 
 //Admin
 $routes->get('/admin', 'admin::index', ['filter' => 'admin']);
+$routes->delete('/user/(:num)', 'user::delete/$1');
 
 //Montir
 $routes->group('/montir', ['filter' => 'admin'], function ($routes) {

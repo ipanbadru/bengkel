@@ -54,6 +54,12 @@
                                 </a>
                             </li>
                             <li class="nav-item">
+                                <a class="nav-link <?= ($active == 'daftar user') ? 'active' : ''; ?>" href="/user">
+                                    <i class="ni ni-badge text-primary"></i>
+                                    <span class="nav-link-text">User</span>
+                                </a>
+                            </li>
+                            <li class="nav-item">
                                 <a class="nav-link" href="/registrasi">
                                     <i class="ni ni-circle-08 text-pink"></i>
                                     <span class="nav-link-text">Register</span>
@@ -161,8 +167,8 @@
                         <span class="avatar avatar-sm rounded-circle">
                             <img src="/img/profile.png">
                         </span>
-                        <div class="media-body  ml-2  d-none d-lg-block">
-                            <span class="mb-0 text-sm  font-weight-bold"><?= session()->get('nama'); ?></span>
+                        <div class="media-body ml-2  d-none d-lg-block">
+                            <span class="mb-0 text-sm font-weight-bold text-secondary"><?= session()->get('nama'); ?></span>
                         </div>
                     </div>
                 </div>
@@ -186,48 +192,53 @@
     <script src="https://cdnjs.cloudflare.com/ajax/libs/Chart.js/2.9.3/Chart.bundle.min.js"></script>
     <script src="/assets/js/argon.js?v=1.2.0"></script>
     <script>
-        $(document).ready(function() {
-            $.ajax({
-                url: '/pembayaran/notifications',
-                method: 'post',
-                dataType: 'json',
-                success: function(data) {
-                    if (data == 0) {
-                        $('.pembayaran').html('');
-                    } else {
-                        console.log(data);
-                        $('.pembayaran').html(data);
-                    }
+        fetch('/pembayaran/notifications', {
+            method: "get",
+            headers: {
+                "Content-Type": "application/json",
+                "X-Requested-With": "XMLHttpRequest"
+            }
+        }).then(response => response.json()).then(ntf => {
+            const pembayaran = document.querySelector('.pembayaran');
+            if (ntf == 0) {
+                pembayaran.innerHTML = '';
+            } else {
+                pembayaran.innerHTML = ntf;
+            }
+        });
+        setInterval(function() {
+            fetch('/pembayaran/dataNotifications', {
+                method: "get",
+                headers: {
+                    "Content-Type": "application/json",
+                    "X-Requested-With": "XMLHttpRequest"
+                }
+            }).then(response => response.json()).then(data => {
+                if (data.length == document.querySelector('.pembayaran').innerHTML) {
+                    return false;
+                } else {
+                    document.querySelector('.pembayaran').innerHTML = data.length;
+                    let content = document.querySelector('.content-pembayaran');
+                    content.innerHTML = '';
+                    let cards = '';
+                    data.forEach(d => cards += show(d));
+                    content.innerHTML = cards;
                 }
             });
-            setInterval(function() {
-                $.ajax({
-                    url: 'pembayaran/dataNotifications',
-                    method: 'post',
-                    dataType: 'json',
-                    success: function(data) {
-                        if (data.length == $('.pembayaran').html()) {
-                            return false;
-                        } else {
-                            $('.content-pembayaran').html('');
-                            $.each(data, function(i, data) {
-                                $('.pembayaran').html(i + 1);
-                                $('.content-pembayaran').append(`<div class="col mb-4">
+        }, 1000);
+
+        function show(data) {
+            return `<div class="col mb-4">
                                 <div class="card">
                                     <div class="card-body">
-                                        <h5 class="card-title">Nama Pelanggan : ` + data.nama_pelanggan + ` </h5>
-                                        <h5 class="card-title">Jenis Motor : ` + data.detail_merk + `</h5>
-                                        <p class="card-text">Kendala : ` + data.kendala + `</p>
-                                        <a href="/pembayaran/bayar/` + data.id + `" class="btn btn-success">Bayar</a>
+                                        <h5 class="card-title">Nama Pelanggan : ${data.nama_pelanggan}</h5>
+                                        <h5 class="card-title">Jenis Motor : ${data.detail_merk}</h5>
+                                        <p class="card-text">Kendala : ${data.kendala}</p>
+                                        <a href="/pembayaran/bayar/${data.id}" class="btn btn-success">Bayar</a>
                                     </div>
                                 </div>
-                            </div>`);
-                            });
-                        }
-                    }
-                });
-            }, 2000)
-        });
+                            </div>`;
+        }
     </script>
     <?= $this->renderSection('script'); ?>
 </body>
