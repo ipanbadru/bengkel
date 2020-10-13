@@ -40,7 +40,12 @@ $routes->get('/auth/logout', 'auth::logout', ['filter' => 'auth']);
 
 //Admin
 $routes->get('/admin', 'admin::index', ['filter' => 'admin']);
-$routes->delete('/user/(:num)', 'user::delete/$1');
+//User
+$routes->group('/user', ['filter' => 'admin'], function ($routes) {
+	$routes->add('', 'user::index');
+	$routes->add('index', 'user::index');
+	$routes->delete('(:num)', 'user::delete/$1');
+});
 
 //Montir
 $routes->group('/montir', ['filter' => 'admin'], function ($routes) {
@@ -79,6 +84,11 @@ $routes->group('/pembayaran', ['filter' => 'kasir'],  function ($routes) {
 	$routes->add('bayar/(:num)', 'pembayaran::bayar/$1');
 	$routes->add('transaksi', 'pembayaran::transaksi');
 });
+
+//Profile
+$routes->get('/profile', 'profile::index', ['filter' => 'auth']);
+$routes->get('/profile/index', 'profile::index', ['filter' => 'auth']);
+
 
 /**
  * --------------------------------------------------------------------

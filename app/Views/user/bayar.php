@@ -53,7 +53,7 @@
                             <div class="input-group-prepend">
                                 <span class="input-group-text" id="basic-addon1">Rp</span>
                             </div>
-                            <input type="text" class="form-control <?= ($validation->hasError('harga')) ? 'is-invalid' : ''; ?>" id="harga_total" aria-label="Username" onkeyup="splitInDots(this);" aria-describedby="basic-addon1" name="harga"">
+                            <input type="text" class="form-control <?= ($validation->hasError('harga')) ? 'is-invalid' : ''; ?>" id="harga_total" aria-label="Username" onkeyup="splitInDots(this);" aria-describedby="basic-addon1" name="harga">
                         </div>
                         <div class=" invalid-feedback">
                             <?= $validation->getError('harga'); ?>

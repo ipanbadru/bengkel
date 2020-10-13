@@ -7,6 +7,7 @@ use App\Models\montirModel;
 use App\Models\notificationsModel;
 use App\Models\transaksiModel;
 use CodeIgniter\I18n\Time;
+use Dompdf\Dompdf;
 
 class Pembayaran extends BaseController
 {
@@ -96,9 +97,11 @@ class Pembayaran extends BaseController
         ])) {
             return redirect()->to('/pembayaran/bayar/' . $this->request->getVar('id'))->withInput();
         }
+        $tb_detail = \Config\Database::connect()->table('detail_transaksi');
         $jumlah_pengeluaran = [];
         $pengeluaran = $this->request->getVar('pengeluaran_barang');
         for ($i = 1; $i <= $pengeluaran; $i++) {
+            //Mengurangi jumlah Barang x
             $barang = $this->request->getVar("barang$i");
             $jumlah = $this->request->getVar("jumlah_barang$i");
             $result = $this->barang->where('id', $barang)->first();
@@ -107,6 +110,14 @@ class Pembayaran extends BaseController
             $this->barang->set('stok', $result);
             $this->barang->where('id', $barang);
             $this->barang->update();
+
+            //Menambahkan detal trransaksi
+            $data = [
+                'transaksi_id' => $this->transaksi->selectMax('id')->first()['id'] + 1,
+                'barang_id' => $barang,
+                'jumlah_barang' => $jumlah,
+            ];
+            $tb_detail->insert($data);
         }
         $notif = $this->notifications->where('id', $this->request->getVar('id'))->first();
         $user = \Config\Database::connect()->table('user');
@@ -145,7 +156,7 @@ class Pembayaran extends BaseController
                 'active' => 'history',
                 'jumlah' => $this->transaksi->where('tanggal', Time::now('Asia/Jakarta')->toDateString())
                     ->countAllResults(),
-                'transaksi' => $this->transaksi->select('*')
+                'transaksi' => $this->transaksi->select('pelanggan.nama_pelanggan, merk.merk_motor, transaksi.waktu_servis, transaksi.total, transaksi.id')
                     ->join('pelanggan', 'pelanggan.id = transaksi.pelanggan_id')
                     ->join('merk', 'merk.id = transaksi.merk_id')
                     ->where('tanggal', Time::now('Asia/Jakarta')->toDateString())
@@ -160,7 +171,26 @@ class Pembayaran extends BaseController
             $barang = $this->request->getPost('barang');
             $jumlah = $this->request->getPost('jumlah');
             $result = $this->barang->where('id', $barang)->first()['harga_jual'] * $jumlah;
-            echo json_encode($result);
+            return json_encode($result);
         }
+    }
+
+    public function cetakDataHariIni()
+    {
+        $tanggal = Time::now('Asia/Jakarta')->toDateString();
+        $data['transaksi'] = $this->transaksi->where('tanggal', $tanggal)->join('pelanggan', 'pelanggan.id = transaksi.pelanggan_id')->join('merk', 'merk.id = transaksi.merk_id')->join('montir', 'montir.id = transaksi.montir_id')->findAll();
+        $data['tanggal'] = $tanggal;
+        $dompdf = new Dompdf();
+        $html = view('user/cetak_data_hari_ini', $data);
+        $dompdf->loadHtml($html);
+
+        // (Optional) Setup the paper size and orientation
+        $dompdf->setPaper('A4', 'landscape');
+
+        // Render the HTML as PDF
+        $dompdf->render();
+
+        // Output the generated PDF to Browser
+        $dompdf->stream('Laporan Data tanggal ' . $tanggal . '.pdf', ['Attachment' => false]);
     }
 }

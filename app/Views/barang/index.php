@@ -1,6 +1,6 @@
 <?= $this->extend('layout/app'); ?>
 <?= $this->section('search'); ?>
-<form class="navbar-search navbar-search-light form-inline mr-sm-3" id="navbar-search-main" action="/barang" method="post">
+<form class="navbar-search navbar-search-light form-inline mr-sm-3" id="navbar-search-main" action="/barang" method="get">
     <div class="form-group mb-0">
         <div class="input-group input-group-alternative input-group-merge">
             <div class="input-group-prepend">

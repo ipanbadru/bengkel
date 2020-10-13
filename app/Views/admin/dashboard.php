@@ -1,12 +1,5 @@
 <?= $this->extend('layout/app'); ?>
 <?= $this->section('content'); ?>
-<!-- <?php foreach ($transaksi as $t) {
-            $tanggal[] = $t['tanggal'];
-            $tanggal = array_unique($tanggal);
-        }
-        foreach ($tanggal as $t) {
-        }
-        ?> -->
 <div class="header bg-primary pb-6">
     <div class="container-fluid">
         <div class="header-body">
@@ -20,7 +13,7 @@
                                 <div class="col">
                                     <h5 class="card-title text-uppercase text-muted mb-0">Jumlah Pelanggan</h5>
                                     <span class="h2 font-weight-bold mb-0"><?= $jumlah_pelanggan; ?></span>
-                                </div>
+                                </div>   
                                 <div class="col-auto">
                                     <div class="ni icon-shape bg-gradient-red text-white rounded-circle shadow">
                                         <i class="ni ni-single-02"></i>
@@ -81,8 +74,8 @@
                         <div class="card-body">
                             <div class="row">
                                 <div class="col">
-                                    <h5 class="card-title text-uppercase text-muted mb-0"> Transaksi hari ini</h5>
-                                    <span class="h2 font-weight-bold mb-0"><?= $transaksi_today ?></span>
+                                    <h5 class="card-title text-uppercase text-muted mb-0"> Pelanggan bulan ini</h5>
+                                    <span class="h2 font-weight-bold mb-0"><?= $jumlah_pelanggan_bulan_ini; ?></span>
                                 </div>
                                 <div class="col-auto">
                                     <div class="icon icon-shape bg-gradient-info text-white rounded-circle shadow">
@@ -91,7 +84,7 @@
                                 </div>
                             </div>
                             <p class="mt-1 mb-0 text-sm">
-                                <span class="text-success mr-2"><a href="/pembayaran/history">Lihat Transaksi Hari ini</a></span>
+                                <span class="text-success mr-2"><a href="/admin/dataPerbulan">Lihat Data perbulan</a></span>
                             </p>
                         </div>
                     </div>
@@ -153,8 +146,8 @@
     <?= $this->endSection(); ?>
     <?= $this->section('script'); ?>
     <script>
-        var ctx = document.getElementById('myChart');
-        var myChart = new Chart(ctx, {
+        const ctx = document.getElementById('myChart');
+        let myChart = new Chart(ctx, {
             type: 'line',
             data: {
                 labels: <?= json_encode($nama_barang); ?>,
@@ -162,13 +155,13 @@
                     label: 'Stok',
                     data: <?= json_encode($jumlah_barang); ?>,
                     backgroundColor: [
-                        'rgba(137, 196, 244, 1)'
+                        'rgba(137, 196, 244, .8)'
 
                     ],
                     borderColor: [
                         'blue'
                     ],
-                    borderWidth: 3
+                    borderWidth: 2
                 }]
             },
             options: {

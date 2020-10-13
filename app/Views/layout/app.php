@@ -15,8 +15,6 @@
     <!-- Page plugins -->
     <!-- Argon CSS -->
     <link rel="stylesheet" href="/assets/css/argon.css?v=1.2.0" type="text/css">
-    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/Chart.js/2.9.3/Chart.css">
-    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/Chart.js/2.9.3/Chart.min.css">
 </head>
 
 <body>
@@ -39,6 +37,12 @@
                                 <a class="nav-link <?= ($active == 'dashboard') ? 'active' : ''; ?>" href="/admin">
                                     <i class="ni ni-tv-2 text-primary"></i>
                                     <span class="nav-link-text">Dashboard</span>
+                                </a>
+                            </li>
+                            <li class="nav-item <?= ($active == 'profile') ? 'active' : ''; ?>">
+                                <a class="nav-link" href="/profile">
+                                    <i class="ni ni-circle-08 text-info"></i>
+                                    <span class="nav-link-text">Profile</span>
                                 </a>
                             </li>
                             <li class="nav-item">
@@ -115,6 +119,12 @@
                                 <span class="nav-link-text">Transaksi</span>
                             </a>
                         </li>
+                        <li class="nav-item <?= ($active == 'profile') ? 'active' : ''; ?>">
+                            <a class="nav-link" href="/profile">
+                                <i class="ni ni-circle-08 text-info"></i>
+                                <span class="nav-link-text">Profile</span>
+                            </a>
+                        </li>
                     <?php endif ?>
                     <?php if (session()->get('role') == 'kasir') : ?>
                         <li class="nav-item">
@@ -127,6 +137,12 @@
                             <a class="nav-link <?= ($active == 'history') ? 'active' : ''; ?>" href="/pembayaran/history">
                                 <i class="ni ni-chart-pie-35 text-primary"></i>
                                 <span class="nav-link-text">pembayaran hari ini</span>
+                            </a>
+                        </li>
+                        <li class="nav-item <?= ($active == 'profile') ? 'active' : ''; ?>">
+                            <a class="nav-link" href="/profile">
+                                <i class="ni ni-circle-08 text-info"></i>
+                                <span class="nav-link-text">Profile</span>
                             </a>
                         </li>
                     <?php endif ?>
@@ -163,18 +179,20 @@
                     </form> -->
                     <!-- Navbar links -->
                     <?= $this->renderSection('search'); ?>
-                    <div class="media align-items-right">
-                        <span class="avatar avatar-sm rounded-circle">
-                            <img src="/img/profile.png">
-                        </span>
-                        <div class="media-body ml-2  d-none d-lg-block">
-                            <span class="mb-0 text-sm font-weight-bold text-secondary"><?= session()->get('nama'); ?></span>
-                        </div>
+                    <div class="media align-items-right mr-auto">
+                        <a href="/profile">
+                            <span class="avatar avatar-sm rounded-circle">
+                                <img src="/img/profile.png">
+                            </span>
+                            <div class="media-body ml-2  d-none d-lg-block">
+                                <span class="mb-0 text-sm font-weight-bold text-secondary"><?= session()->get('nama'); ?></span>
+                        </a>
                     </div>
                 </div>
             </div>
-        </nav>
-        <?= $this->renderSection('content'); ?>
+    </div>
+    </nav>
+    <?= $this->renderSection('content'); ?>
     </div>
     <!-- Argon Scripts -->
     <!-- Core -->
@@ -184,12 +202,9 @@
     <script src="/assets/vendor/jquery.scrollbar/jquery.scrollbar.min.js"></script>
     <script src="/assets/vendor/jquery-scroll-lock/dist/jquery-scrollLock.min.js"></script>
     <!-- Optional JS -->
-    <!-- <script src="/assets/vendor/chart.js/dist/Chart.min.js"></script> -->
-    <!-- <script src="/assets/vendor/chart.js/dist/Chart.extension.js"></script> -->
+    <script src="/assets/vendor/chart.js/dist/Chart.min.js"></script>
+    <script src="/assets/vendor/chart.js/dist/Chart.extension.js"></script>
     <!-- Argon JS -->
-    <script src="https://cdn.jsdelivr.net/npm/chart.js@2.8.0"></script>
-    <script src="https://cdnjs.cloudflare.com/ajax/libs/Chart.js/2.9.3/Chart.bundle.js"></script>
-    <script src="https://cdnjs.cloudflare.com/ajax/libs/Chart.js/2.9.3/Chart.bundle.min.js"></script>
     <script src="/assets/js/argon.js?v=1.2.0"></script>
     <script>
         fetch('/pembayaran/notifications', {

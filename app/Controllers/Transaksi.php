@@ -100,7 +100,7 @@ class Transaksi extends BaseController
                     $newResult[] = $r;
                 }
             }
-            echo json_encode($newResult);
+            return json_encode($newResult);
         }
     }
     public function tampilJenis()
@@ -108,7 +108,7 @@ class Transaksi extends BaseController
         if ($this->request->isAJAX()) {
             $merk_motor = $this->request->getPost('merk_motor');
             $result = $this->merk->getWhere(['merk_motor' => $merk_motor])->getResultArray();
-            echo json_encode($result);
+            return json_encode($result);
         }
     }
 }
